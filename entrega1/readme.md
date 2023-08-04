@@ -8,4 +8,4 @@
 
 ### o que falta:
 
-mandar arquivos em vez de strings
+ver se tá funcionando corretamente, fazer algum tipo de modificação no arquivo
