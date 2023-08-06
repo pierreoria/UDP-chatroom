@@ -1,0 +1,54 @@
+import time
+import sys
+import select
+import socket
+
+
+IP = "192.168.0.18"  # TROCAR
+PORTA_SAIDA = 5000
+PORTA_ENTRADA = 9999
+buf = 1024
+file_name = sys.argv[1]
+timeout = 3
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.sendto(file_name.encode("utf-8"), (IP, PORTA_SAIDA))
+print(f"Enviando {file_name} ...")
+
+with open(file_name, "rb") as f:
+   data = f.read(buf)
+   while data:
+       sock.sendto(data, (IP, PORTA_SAIDA))
+       data = f.read(buf)
+       time.sleep(0.01)
+
+print(f"{file_name} enviado com sucesso.")
+sock.close()
+
+sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock2.bind((IP, PORTA_ENTRADA))
+
+fim = False
+
+# recebendo o pacote de volta
+while not fim:
+   data2, addr2 = sock2.recvfrom(1024)
+   if data2:
+       print(f"Recebido: {data2.decode('utf-8').strip()}")
+       file_name = data2.strip().decode("utf-8")
+
+   with open(file_name, 'wb') as f:
+       while True:
+           ready = select.select([sock2], [], [], timeout)
+           if ready[0]:
+               data2, addr2 = sock2.recvfrom(1024)
+               if not data2:
+                   break
+               f.write(data2)
+           else:
+               print(f"{file_name} recebido com sucesso.")
+               f.close()
+               fim = True
+               break
+
+sock2.close()
