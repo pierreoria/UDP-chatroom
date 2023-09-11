@@ -1,3 +1,10 @@
+### Referências
+
+-[projeto passado](https://github.com/rubdelima/ChatBot-Server---InfraCom/tree/master) especificações DIFERENTES
+- [implementação rdt em python](https://github.com/M-Abdullah-Usmani/Reliable-data-transfer-protocol-rdt-3.0-)
+- [projeto kurose 1 (c)](https://github.com/Ghamry0x1/reliable-transport-protocol) - significativamente mais complexo do que temos que fazer
+- [projeto kurose 2 (c++)](https://github.com/shamiul94/Reliable-Data-Transfer-Protocol-RDT-Simulation) - também parece complicado, mas fica de referência
+
 ### para rodar:
 0. rodar comando ifconfig (ipconfig no windows)
 1. pegar o ip que aparecer (inet/ipv4, formato algo parecido com 192.102.0.10)
