@@ -6,7 +6,7 @@
 - [projeto kurose (c++)](https://github.com/shamiul94/Reliable-Data-Transfer-Protocol-RDT-Simulation): também parece complicado, mas fica de referência
 
 
-### Fase 1: implementar funcionalidades
+### Fase 1: interface
 
 Podemos nos basear no test_client e test_server do projeto de fred/rubens (link 1). Em cima disso, o seguinte tem que ser feito:
 
@@ -17,8 +17,9 @@ Podemos nos basear no test_client e test_server do projeto de fred/rubens (link 
 5. Cada cliente deve ter uma base de contatos local com mapeamento {nome : {ip,porta}}
 
 
-### Fase 2: pente fino
+### Fase 2: rdt
 
+0. se basear no diagrama de estados nessa pasta - 'fsm-rdt3'
 1. não fazer a entrega com trechos copiados, fazer nossa própria implementação sem checksum
 2. verificar lógica do rdt
 3. adicionar prints do rdt conforme especificação do projeto
