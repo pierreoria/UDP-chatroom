@@ -3,7 +3,8 @@
 1. Checksum retirado - OK
 2. Cadastro de novo cliente - quase
 3. Permitir vários cliente simultâneos - quase
-  (Portas são dadas aleatoriamente e têm 1/1000 chance de ser mesma porta que outro cliente mas qualquer coisa é só fechar terminal e abrir outro) - OK
+4. Dar porta distinta pra cada cliente - OK
+   (portas são dadas aleatoriamente e têm 1/1000 chance de ser mesma porta que outro cliente mas qualquer coisa é só fechar terminal e abrir outro)
 
 **Resolver:**
 
