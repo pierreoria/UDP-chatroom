@@ -1,54 +1,50 @@
 import socket
-import os
+from rdt import Server
+import re
 
-#dados do cliente
-IP = socket.gethostbyname(socket.gethostname())
-PORTA_SAIDA = 5000
-buff = 1024
+# cria o socket UDP
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+server_address = ('127.0.0.1', 5000)
+server_socket.bind(server_address)
 
-#criando o socket
-udp = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM) 
-udp.bind((IP, PORTA_SAIDA))  
-
-print("Servidor pronto.")
+sv = Server(server_socket)
 
 while True:
-    #recebendo o nome do arquivo
-    filename,_ = udp.recvfrom(buff)
-    filename = str(filename.decode())
-    file_start, file_end = filename.split('.')
+	mensagem, cliente = sv.receber()
 
-    #recebendo o arquivo
-    data, addr = udp.recvfrom(buff)
+	# verifica se início da mensagem é exatamente igual a essa string
+	# re.match retorna nulo se o começo da mensagem não conformar com sequência, match object se corresponder
+	nova_conexao = re.match("hi, meu nome eh ", mensagem)
 
-    #recebendo o número de pacotes
-    pcte = int(data.decode())
 
-    #recebendo os pacotes
-    file_data = b''  
-    for i in range(pcte):
-        pacote, addr = udp.recvfrom(buff)
-        file_data += pacote
-        
-    printf("file data: {file_data.size()}")
+	# é uma nova conexão
+	if (nova_conexao): 
+		# pega nome do novo usuário
+		nome = mensagem.split()[4]
+		
+		print(f' O cliente {nome} acabou de entrar - notificando usuários')
+
+		# adiciona novo usuário
+		sv.adicionar(cliente,nome)
+
+		print(f"no. de contatos: {len(sv.contatos)}")
+		print("porta do cliente novo: " + str(cliente[1]))
+		# notifica todos
+		for contato in sv.contatos:
+			print(f"notificando {sv.contatos[contato]} no ip/porta:{contato} ")
+			# tá tendo um problema aqui porque ele fica esperando um ack infinitamente, 
+			# aí nem chega a notificar o segundo usuário
+			# funciona para um único cliente sem problemas
+			sv.enviar(f"{nome} entrou na sala", contato) 
+
+	# não é uma nova conexão
+	else:
+		print(f' O cliente {cliente} disse {mensagem}')
+
+		# envia mensagem para demais clientes
+		for contato in sv.contatos:
+				# mesmo problema aqui - acho que tá em estado de espera por acks.
+				# funciona para um único cliente sem problemas
+				sv.enviar(f"{nome}: {mensagem}", contato)
+
     
-    #salvando o arquivo
-    transmitir = f"{file_start}_transmitido.{file_end}"
-    with open(transmitir, 'wb') as file:  
-        file.write(file_data)
-
-    #lendo o conteúdo do arquivo
-    with open(transmitir, 'rb') as file:  
-        file_data = file.read()
-    
-    #enviando os pacotes
-    pctes = (len(file_data) + buff - 1) // buff
-    udp.sendto(str(pctes).encode(), addr)  
-    for i in range(pctes):
-        pacote = file_data[(i*buff):(min((i + 1) * buff, len(file_data)))]
-        udp.sendto(pacote, addr)
-
-    print(f"Mensagem enviada.")
-    break
-    
-udp.close()
