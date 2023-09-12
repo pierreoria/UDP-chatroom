@@ -1,3 +1,14 @@
+**Progresso**
+
+1. Checksum retirado - OK
+2. Cadastro de novo cliente - quase
+3. Permitir vários cliente simultâneos - quase
+  (Portas são dadas aleatoriamente e têm 1/1000 chance de ser mesma porta que outro cliente mas qualquer coisa é só fechar terminal e abrir outro) - OK
+
+**Resolver:**
+
+1. Estado de espera infinita por ack, tem que deixar compatível para vários clientes de uma vez
+
 ### Referências
 
 - [projeto fred/rubens](https://github.com/rubdelima/ChatBot-Server---InfraCom/tree/master): especificações DIFERENTES
@@ -10,7 +21,7 @@
 
 Podemos nos basear no test_client e test_server do projeto de fred/rubens (link 1). Em cima disso, o seguinte tem que ser feito:
 
-1. cadastro: cada usuário deve dizer seu nome para se conectar à sala (outros clientes conectados dever ser notificados)
+1. cadastro: cada usuário deve dizer seu nome para se conectar à sala (outros clientes conectados devem ser notificados)
 2. comando 'bye': desconectar cliente da sala
 3. 'list': transmitir lista de clientes na sala para
 4. Servidor deve retransmitir mensagens do chat para TODOS os clientes, com timestamp e nome do cliente
