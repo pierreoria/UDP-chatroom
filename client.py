@@ -1,33 +1,45 @@
 import socket
-import sys
-import os
+import random as rd
+from rdt import Client
 
-#dados do cliente
-IP = input("Digite aqui o IP do seu computador como cliente: ")
-PORTA_SAIDA = 5000
-buff = 1024
+server_address = ('127.0.0.1', 5000)
 
-#criando o socket
-udp = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)  
+# tudo a seguir é só porque ele tava sempre dando a mesma porta pra dois clientes diferentes, 
+# aí fiz uma gambiarra aqui
+# pular para parte importante abaixo
 
-#enviando o nome do arquivo
-file = input("Digite aqui o caminho do arquivo da pasta que você deseja transmitir: ") 
-udp.sendto(file.encode(),(IP, PORTA_SAIDA))
+# Define a range of ports for your chatroom clients
+start_port = 5000
+end_port = 6000
 
-#enviando o arquivo
-with open(file, 'rb') as file:  
-    data = file.read()
+# comportamento não determinístico: alguma chance de clientes serem designados pra mesma porta
+num = rd.randint(1,1000)
 
-#enviando o número de pacotes
-pctes = int((len(data) + buff - 1) // buff)
-udp.sendto(str(pctes).encode(), (IP, PORTA_SAIDA))
+# Function to find an available port within the specified range
+def find_available_port(start, end, num):
+    for port in range(start+num, end + 1):
+        try:
+            client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Set SO_REUSEADDR option
+            client_socket.bind(('127.0.0.1', port))
+            return client_socket, port
+        except OSError:
+            pass
 
-#enviando os pacotes
-for i in range(pctes):
-    pacote = data[(i*buff):(min((i + 1) * buff, len(data)))]
-    udp.sendto(pacote, (IP, PORTA_SAIDA))
+    raise Exception("No available ports in the specified range")
 
-print("Recebido do servidor para o cliente")
+# create a new client socket
+try:
+    client_socket, assigned_port = find_available_port(start_port, end_port,num)
+    print(f"Client socket bound to port {assigned_port}")
+    cl = Client(client_socket)
 
-#recebendo o nome do arquivo
-udp.close()
+    # única parte importante --------------------------------------------------------------------------
+    while True:
+    	mensagem = input('Insira uma mensagem: ')
+    	cl.enviar(mensagem, server_address)
+    	mensagem, _ = cl.receber()
+    	print(f'Servidor: {mensagem}')
+
+except Exception as e:
+    print("Error:", e)
