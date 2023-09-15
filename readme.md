@@ -13,6 +13,9 @@
 ### Referências
 
 - [projeto fred/rubens](https://github.com/rubdelima/ChatBot-Server---InfraCom/tree/master): especificações DIFERENTES
+- [laboratorio kurose com solução](https://gaia.cs.umass.edu/kurose_ross/programming/RDT): RDT todo, só não tem as funcionalidades específicas da sala de chat
+
+#### Outras
 - [implementação rdt (python)](https://github.com/M-Abdullah-Usmani/Reliable-data-transfer-protocol-rdt-3.0-): código simples
 - [projeto kurose (c)](https://github.com/Ghamry0x1/reliable-transport-protocol): significativamente mais complexo do que temos que fazer
 - [projeto kurose (c++)](https://github.com/shamiul94/Reliable-Data-Transfer-Protocol-RDT-Simulation): também parece complicado, mas fica de referência
