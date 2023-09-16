@@ -37,15 +37,14 @@ def broadcast():
 				clients.pop(addr)
 
 			# notificar todos sobre chegada de novo usuário
-			elif message.decode().startswith("NOME:"):
+			elif message.decode().startswith("NOME: hi, meu nome eh"):
 				string_nome = message.decode().split()
-				print(string_nome)
-				if len(string_nome) >= 3:
+				if len(string_nome) >= 6:
 					name = " ".join(string_nome[5:])
-					print(name)
 					clients[addr] = name
 					for client, client_name in clients.items():
-							server.sendto(f"{name} entrou na sala! endereço: {addr}".encode(), client)
+						server.sendto(f"{name} entrou na sala! endereço: {addr}".encode(), client)
+
 			
 			# mandar mensagem normal no chat
 			else:
