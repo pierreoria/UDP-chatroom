@@ -2,6 +2,8 @@ import socket
 import threading
 import queue
 from datetime import datetime
+from rdt import Client
+from rdt import Server
 
 # estrutura para armazenar mensagens
 messages = queue.Queue()
@@ -37,16 +39,13 @@ def broadcast():
 				clients.pop(addr)
 
 			# notificar todos sobre chegada de novo usuário
-			elif message.decode().startswith("NOME:"):
-				string_nome = message.decode().split()[1:]
-				name = ""
-				for i in range(len(string_nome)):
-					name += str(string_nome[i])
-					if (i != len(string_nome)-1):
-						name += " "
+			elif message.decode().startswith("NOME: hi, meu nome eh"):
+				string_nome = message.decode().split()
+				if len(string_nome) >= 6:
+					name = " ".join(string_nome[5:])
 					clients[addr] = name
 					for client, client_name in clients.items():
-							server.sendto(f"{name} entrou na sala! endereço: {addr}".encode(), client)
+						server.sendto(f"{name} entrou na sala! endereço: {addr}".encode(), client)
 			
 			# mandar mensagem normal no chat
 			else:

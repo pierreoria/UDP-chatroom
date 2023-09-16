@@ -2,6 +2,8 @@ import socket
 import threading
 import random
 import re
+from rdt import Client
+from rdt import Server
 
 # socket udp
 client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -13,8 +15,6 @@ name = input("Nome: ")
 
 # dicionario de contatos
 contatos = {}
-
-
 
 # essa função atualiza lista local de contatos a cada nova mensagem - mapeamento (ip,porta):nome
 def tentativa_add(message):

@@ -2,10 +2,22 @@ import socket
 import struct
 
 class RDT():
-    def __init__(self,sock):
-        self.sock = sock
+    def __init__(self,tipo):
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.server_address = ('localhost', 5000)
+        self.client_address = ('localhost', 0) 
+        self.BUFFER_SIZE = 1024
+        self.tipo = tipo
+        if tipo == 'client':
+            self.sock.bind(self.client_address)
+        else:
+            self.contatos ={}
+            self.sock.bind(self.server_address)
+            print(f"Server started on {self.server_address}")
+        self.state = 0
+
         # lista de contatos - tanto servidor quanto cliente tem uma estrutura local
-        self.contatos = {}
+        
     
     def create_pkt(self, ack:int, seq:int, msg:str)->bytes:
         tamanho_mensagem = len(msg.encode())
