@@ -36,10 +36,10 @@ try:
 
     # única parte importante --------------------------------------------------------------------------
     while True:
-    	mensagem = input('Insira uma mensagem: ')
-    	cl.enviar(mensagem, server_address)
-    	mensagem, _ = cl.receber()
-    	print(f'Servidor: {mensagem}')
+        mensagem = input('Insira uma mensagem: ')
+        cl.enviar(mensagem, server_address)
+        mensagem, _ = cl.receber()
+        print(f'Servidor: {mensagem}')
 
 except Exception as e:
     print("Error:", e)

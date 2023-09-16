@@ -1,6 +1,7 @@
 import socket
 from rdt import Server
 import re
+import datetime
 
 # cria o socket UDP
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -39,12 +40,16 @@ while True:
 
 	# não é uma nova conexão
 	else:
-		print(f' O cliente {cliente} disse {mensagem}')
+		hora_data_atual = datetime.datetime.now().strftime("%H:%M:%S %d-%m-%Y")
+
+		mensagem_formatada = f"{cliente[0]}:{cliente[1]}/~{nome}: {mensagem} {hora_data_atual}"
+
+		print(mensagem_formatada)
 
 		# envia mensagem para demais clientes
 		for contato in sv.contatos:
 				# mesmo problema aqui - acho que tá em estado de espera por acks.
 				# funciona para um único cliente sem problemas
-				sv.enviar(f"{nome}: {mensagem}", contato)
+				sv.enviar(f"{mensagem_formatada}", contato)
 
     
