@@ -38,12 +38,11 @@ def broadcast():
 
 			# notificar todos sobre chegada de novo usuário
 			elif message.decode().startswith("NOME:"):
-				string_nome = message.decode().split()[1:]
-				name = ""
-				for i in range(len(string_nome)):
-					name += str(string_nome[i])
-					if (i != len(string_nome)-1):
-						name += " "
+				string_nome = message.decode().split()
+				print(string_nome)
+				if len(string_nome) >= 3:
+					name = " ".join(string_nome[5:])
+					print(name)
 					clients[addr] = name
 					for client, client_name in clients.items():
 							server.sendto(f"{name} entrou na sala! endereço: {addr}".encode(), client)
