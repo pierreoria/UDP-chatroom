@@ -15,8 +15,11 @@ o código ### será adicionado no final de todas as mensagens.
 Quando o receptor ler uma mensagem e encontrar isso no final, já sabe que o final da mensagem foi atingido.
 
 na sintaxe da biblioteca struct: <?2i1012s 
+
 (little-endian, bool, 3 inteiros, string de 1008 bytes: totaliza 1024 bytes -> tamanho do pacote que estamos usando)
+
 pacote ack: True,ack,1-ack,"###"
+
 pacote de dados: False,1-seq,seq,mensagem
 
 ### funções a escrever:
