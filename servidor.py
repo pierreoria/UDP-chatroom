@@ -23,14 +23,6 @@ estado_receptor = {}
 # 4 estados: 0 a 3  
 estado_emissor = {}
 
-
-"""
-TODO:
-
-- nome sempre tem que ser reenviado - por que?
-
-"""
-
 server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server.bind(("localhost",9999))
 
