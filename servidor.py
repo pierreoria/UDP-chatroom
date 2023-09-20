@@ -24,6 +24,13 @@ estado_receptor = {}
 estado_emissor = {}
 
 
+"""
+TODO:
+
+- nome sempre tem que ser reenviado - por que?
+
+"""
+
 server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server.bind(("localhost",9999))
 
@@ -105,9 +112,7 @@ def receive():
 	while True:
 		try:
 			entrada, addr = server.recvfrom(1024)
-			entrada_dict = desempacotar(entrada)
-
-			print("mensagem: ",entrada_dict['mensagem'])
+			entrada_dict = desempacotar(entrada)			
 			
 			# inicializar todas variáveis globais se for cliente novo (menos nome que resolve dentro da função broadcast)
 			if (addr not in ack_recebido):
@@ -124,8 +129,8 @@ def receive():
 				print(f"ack {ack_recebido[addr]} recebido")
 			else:
 				seq_recebido[addr] = entrada_dict['seq_bit']
-				
-				print(f"mensagem do endereço {addr}. seq: {seq_recebido[addr]})")
+				print("mensagem: ",entrada_dict['mensagem'])
+				print(f"origem: {addr}. seq: {seq_recebido[addr]})")
 
 				# envia ack independente se foi correto ou não
 				enviar_ack(addr)
