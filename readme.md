@@ -1,7 +1,3 @@
-### ver:
-
-exemplo servidor que acabei de subir - implementação com threads fica mais simples. muda mais o servidor do que os clientes
-
 ### formatação dos pacotes:
 (tanto pacotes de dados quanto pacotes ACK)
 
@@ -22,12 +18,6 @@ pacote ack: True,ack,1-ack,"###"
 
 pacote de dados: False,1-seq,seq,mensagem
 
-### funções a escrever:
-
-- empacotar
-- mandar pacote
-- desempacotar
-
 ## depois
 
 adicionar prints pra demonstrar o funcionamento correto do rdt
@@ -44,9 +34,9 @@ adicionar prints pra demonstrar o funcionamento correto do rdt
 - [projeto kurose (c++)](https://github.com/shamiul94/Reliable-Data-Transfer-Protocol-RDT-Simulation): também parece complicado, mas fica de referência
 
 
-### para rodar:
-1. abrir um terminal e rodar server.py, pra ele ficar aberto para conexões
-2. abrir outros terminais e rodar client.py
+### Para rodar a entrega 2:
+1. abrir um terminal e rodar servidor.py, pra ele ficar aberto para conexões
+2. abrir outros terminais e rodar cliente.py
 
 Grupo: Alice Peruniz, Anne Collier, João Luís Agra, Lívia Bion, Maria Clara Moura, Pierre Oriá
 

@@ -112,7 +112,7 @@ def tentativa_add(message):
 				nome += lista_nome[0][i]
 			else:
 				break
-		ip = '127.0.0.1'
+			ip =  '127.0.0.1'
 		endereco = (ip, porta)
 		contatos[endereco] = nome
 
@@ -153,15 +153,7 @@ def receive():
 t = threading.Thread(target=receive)
 t.start()
 
-# inicialmente pede nome do usuário
-name = input("Nome: ")
-
-# manda nome com formatação especial para servidor
-msg = f"NOME: {name}"
-enviar_dados(msg)
-
 # continuamente pede input do usuário, manda exclusivamente pro servidor
 while True:
 	mensagem = input("")
 	enviar_dados(mensagem)
-

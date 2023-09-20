@@ -23,7 +23,6 @@ estado_receptor = {}
 # 4 estados: 0 a 3  
 estado_emissor = {}
 
-
 server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server.bind(("localhost",9999))
 
@@ -105,9 +104,7 @@ def receive():
 	while True:
 		try:
 			entrada, addr = server.recvfrom(1024)
-			entrada_dict = desempacotar(entrada)
-
-			print("mensagem: ",entrada_dict['mensagem'])
+			entrada_dict = desempacotar(entrada)			
 			
 			# inicializar todas variáveis globais se for cliente novo (menos nome que resolve dentro da função broadcast)
 			if (addr not in ack_recebido):
@@ -124,8 +121,8 @@ def receive():
 				print(f"ack {ack_recebido[addr]} recebido")
 			else:
 				seq_recebido[addr] = entrada_dict['seq_bit']
-				
-				print(f"mensagem do endereço {addr}. seq: {seq_recebido[addr]})")
+				print("mensagem: ",entrada_dict['mensagem'])
+				print(f"origem: {addr}. seq: {seq_recebido[addr]})")
 
 				# envia ack independente se foi correto ou não
 				enviar_ack(addr)
@@ -175,8 +172,8 @@ def broadcast():
 				estado_emissor.pop(addr)
 
 			# notificar todos sobre chegada de novo usuário
-			elif message.startswith("NOME:"):
-				string_nome = message.split()[1:]
+			elif message.startswith("hi, meu nome eh"):
+				string_nome = message.split()[4:]
 				name = ""
 				for i in range(len(string_nome)):
 					name += str(string_nome[i])
