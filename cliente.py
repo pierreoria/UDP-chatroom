@@ -21,7 +21,7 @@ seq_recebido = -1
 ack_recebido = -1
 
 # ESTADOS
-estado_recebedor = 0
+estado_receptor = 0
 estado_emissor = 0
 # -----------------------------------------------------------------
 
@@ -68,27 +68,18 @@ def enviar_dados(mensagem):
     	if (ack_recebido == seq_bit):
     		recebido = True
 
-    	# espera continuamente ack - tive que botar aqui porque não funcionou deixando na função receive.
-    	# isso significa que, nesse intervalo de tempo em que ele tá esperando ack, outras mensagens vão ser perdidas.
-    	# isso não quebra o rdt, porque vai ter retransmissão, mas é um pequeno problema. deixar tempo de espera não mt longo
-    	# (desfazer isso e ver se pega ainda)
-    	entrada, _ = client.recvfrom(1024)
-    	entrada_dict = desempacotar(entrada)
-    	if entrada_dict['is_ack']:
-    		ack_recebido = entrada_dict['ack_bit']
-
-
     	if (ack_recebido == seq_bit):
     		recebido = True
     	# modular esse tempo aqui - (em segundos)
     	elif (timer > 1):
     		# reenvia pacote
     		client.sendto(pacote,server_addr)
-    		print("reenviando")
+    		#print("reenviando")
     		start_time = time.time()
 
     # se chegou até aqui, ack correto foi recebido -> troca de estado
     estado_emissor = (estado_emissor+1)%4
+    #print("ack recebido")
 
 
 # lógica mais simples: dá ack correspondente e atualiza estado
@@ -101,7 +92,7 @@ def enviar_ack():
     # isso aqui não importa, mas vou deixar pra pacotes de dados e pacotes de ack terem msm formato
     seq_bit = 1-ack_bit
 
-    pacote = empacotar(is_ack = True, ack_bit = ack_bit, seq_bit = seq_bit, tamanho = 0,mensagem='')
+    pacote = empacotar(is_ack = True, ack_bit = ack_bit, seq_bit = seq_bit, tamanho = 3,mensagem='ack')
 
     # envia pacote de volta pra servidor, independente de pacote ackado ter vindo na ordem certa
     client.sendto(pacote,server_addr)
@@ -129,6 +120,10 @@ def tentativa_add(message):
 def receive():
 	while True:
 		try:
+			global ack_recebido
+			global seq_recebido
+			global estado_receptor
+
 			entrada, _ = client.recvfrom(1024)
 			entrada_dict = desempacotar(entrada)
 			
@@ -136,8 +131,6 @@ def receive():
 			# sempre verifica se já tem contato adicionado
 			mstring = entrada_dict['mensagem']
 			tentativa_add(mstring)
-			print('mensagem: ', mstring)
-
 
 			# processa ack/dados
 			if entrada_dict['is_ack']:
@@ -150,11 +143,11 @@ def receive():
 				# se seq recebido foi o correto:
 				if (estado_receptor == seq_recebido):
 					# troca de estado
-					estado_receptor[origem] = 1 - estado_receptor[origem]
+					estado_receptor = 1 - estado_receptor
 					# mostra mensagem pro cliente
 					print(entrada_dict['mensagem'])			
-		except:
-			pass	
+		except Exception as e:
+			print("Exceção: ", e)
 
 # eternamente esperando mensagens, thread pra isso
 t = threading.Thread(target=receive)
