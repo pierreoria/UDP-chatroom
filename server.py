@@ -13,14 +13,10 @@ sv = Server(server_socket)
 while True:
 	mensagem, cliente = sv.receber()
 
-	# verifica se início da mensagem é exatamente igual a essa string
-	# re.match retorna nulo se o começo da mensagem não conformar com sequência, match object se corresponder
-	nova_conexao = re.match("hi, meu nome eh ", mensagem)
+	# first message sent by new users must conform to REGEX defined below
+	nova_conexao = re.match("hi, my name is ", mensagem)
 
-
-	# é uma nova conexão
 	if (nova_conexao): 
-		# pega nome do novo usuário
 		nome = mensagem.split()[4]
 		
 		print(f' O cliente {nome} acabou de entrar - notificando usuários')
@@ -33,12 +29,8 @@ while True:
 		# notifica todos
 		for contato in sv.contatos:
 			print(f"notificando {sv.contatos[contato]} no ip/porta:{contato} ")
-			# tá tendo um problema aqui porque ele fica esperando um ack infinitamente, 
-			# aí nem chega a notificar o segundo usuário
-			# funciona para um único cliente sem problemas
 			sv.enviar(f"{nome} entrou na sala", contato) 
 
-	# não é uma nova conexão
 	else:
 		hora_data_atual = datetime.datetime.now().strftime("%H:%M:%S %d-%m-%Y")
 
@@ -46,10 +38,7 @@ while True:
 
 		print(mensagem_formatada)
 
-		# envia mensagem para demais clientes
 		for contato in sv.contatos:
-				# mesmo problema aqui - acho que tá em estado de espera por acks.
-				# funciona para um único cliente sem problemas
 				sv.enviar(f"{mensagem_formatada}", contato)
 
     
