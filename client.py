@@ -4,15 +4,10 @@ from rdt import Client
 
 server_address = ('127.0.0.1', 5000)
 
-# tudo a seguir é só porque ele tava sempre dando a mesma porta pra dois clientes diferentes, 
-# aí fiz uma gambiarra aqui
-# pular para parte importante abaixo
-
 # Define a range of ports for your chatroom clients
 start_port = 5000
 end_port = 6000
 
-# comportamento não determinístico: alguma chance de clientes serem designados pra mesma porta
 num = rd.randint(1,1000)
 
 # Function to find an available port within the specified range
@@ -34,7 +29,6 @@ try:
     print(f"Client socket bound to port {assigned_port}")
     cl = Client(client_socket)
 
-    # única parte importante --------------------------------------------------------------------------
     while True:
         mensagem = input('Insira uma mensagem: ')
         cl.enviar(mensagem, server_address)
